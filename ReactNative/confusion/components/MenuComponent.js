@@ -12,7 +12,7 @@ function Menu(props){
     /* To supply an image in React Native through require(), it can't take a programmatical address, rather complete exact address */
     const renderMenuItem = ({item, index})=>{
         return(
-            <ListItem key={index} title={item.name} subtitle={item.description} hideChevron={true} leftAvatar={ {source: require('./images/uthappizza.png')} }/>
+            <ListItem key={index} title={item.name} subtitle={item.description} hideChevron={true} leftAvatar={ {source: require('./images/uthappizza.png')}} onPress={()=>props.onPress(item.id)}/>
         );
     };
     
