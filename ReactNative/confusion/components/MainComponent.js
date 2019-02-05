@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import Menu from './MenuComponent';
-import { DISHES } from '../shared/dishes';
 import Dishdetail from './DishdetailComponent';
 import { View, Platform } from 'react-native';
-/* Platform gives access to platform-specific info*/
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import Home from './HomeComponent';
 
-
-/* Setting up Stack Navigation by using a component, MenuNavigator, between Menu & Dishdetail*/
-/* navigationOptions is applied for all the screens inside stack */
 const MenuNavigator = createStackNavigator({
     Menu: { screen: Menu },
     Dishdetail: { screen: Dishdetail }
@@ -25,12 +21,46 @@ const MenuNavigator = createStackNavigator({
     }
 });
 
+/* Home is supposed to be a DrawNavigator but we initially create it with StackNavigator as it provides styling and status bar of that of Stack navigation */
+const HomeNavigator = createStackNavigator({
+    Home: { screen: Home }
+},  {
+    navigationOptions: {
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        }
+    }
+});
+
+const MainNavigator = createDrawerNavigator({
+    Home: { 
+        screen: HomeNavigator,
+        navigationOptions: {
+            title: 'Home',
+            drawerLabel: 'Home'
+        }
+    },
+    Menu: {
+        screen: MenuNavigator,
+        navigationOptions: {
+            title: 'Menu',
+            drawerLabel: 'Menu'
+        }
+    }
+},  {
+    drawerBackgroundColor: '#D1C4E9'
+});
+
 class Main extends Component{
     
     render(){
         return(
             <View style={ {flex: 1, paddingTop: Platform.OS === 'ios'? 0 : Expo.Constants.statusBarHeight} }>
-                <MenuNavigator />
+                <MainNavigator />
             </View>    
         );
     }
