@@ -6,7 +6,6 @@ class Contact extends Component{
     render(){
         return(
             <Card title="Contact Information">
-                <View style={{borderBottomColor: 'black', borderBottomWidth: 1}}/>
                 <FlatList 
                     data={[
                         {key: '121 Clear Water Bay Road'},
