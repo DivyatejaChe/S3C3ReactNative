@@ -16,7 +16,7 @@ export const dishes = (state={
             break;
             
         case ActionTypes.DISHES_FAILED:
-            return {...state, isLoading: false, errMess: action.payload, dishes: []]};            
+            return {...state, isLoading: false, errMess: action.payload};            
             break;
         
         default: 
