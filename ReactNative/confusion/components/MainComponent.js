@@ -6,6 +6,7 @@ import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView 
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
+import Reservation from './ReservationComponent';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchLeaders, fetchPromos } from '../redux/ActionCreators';
@@ -112,6 +113,21 @@ const AboutNavigator = createStackNavigator({
     })
 });
 
+const ReservationNavigator = createStackNavigator({
+    Reservation: { screen: Reservation }
+},  {
+    navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        },
+        headerLeft: <Icon name='menu' size={24} color='white' onPress={()=>navigation.toggleDrawer()} />
+    })
+});
+
 const MainNavigator = createDrawerNavigator({
     Home: { 
         screen: HomeNavigator,
@@ -150,6 +166,16 @@ const MainNavigator = createDrawerNavigator({
             drawerLabel: 'Contact',
             drawerIcon: ({ tintColor })=>(
                 <Icon name='address-card' type='font-awesome' size={22} color={tintColor}/>
+            ),
+        }
+    },
+    Reservation: {
+        screen: ReservationNavigator,
+        navigationOptions: {
+            title: 'Reserve Table',
+            drawerLabel: 'Reserve Table',
+            drawerIcon: ({ tintColor })=>(
+                <Icon name='cutlery' type='font-awesome' size={22} color={tintColor}/>
             ),
         }
     }
