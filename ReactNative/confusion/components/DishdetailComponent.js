@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList } from 'react-native';
-import { Card, Icon } from 'react-native-elements';
+import { View, Text, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { Card, Icon, Rating } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite } from '../redux/ActionCreators';
@@ -42,7 +42,8 @@ function RenderComments({comments}){
         return(
             <View key={index} style={ {margin: 10} }>
                 <Text style={ {fontSize: 14} }>{item.comment}</Text>
-                <Text style={ {fontSize: 12} }>{item.rating} Stars</Text>
+                <Rating imageSize={10} readonly startingValue={item.rating} style={ styles.rating } />
+                
                 <Text style={ {fontSize: 12} }>{'-- '+item.author+', '+dateOfComment}</Text>
             </View>
         );
@@ -87,5 +88,10 @@ class Dishdetail extends Component{
     }
 }
 
+const styles = StyleSheet.create({
+    rating: {
+        flexDirection: 'row'
+    }
+});
 /* '.some()' returns TRUE if there exists an item in there matches the item */
 export default connect(mapStateToProps, mapDispatchToProps)(Dishdetail);
