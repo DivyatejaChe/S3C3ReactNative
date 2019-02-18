@@ -107,7 +107,7 @@ class Dishdetail extends Component{
                     <Modal animationType={'slide'} transparent={false} visible={this.state.showModal} onDismiss={ ()=> this.resetForm()} onRequestClose={ ()=> this.resetForm()}>
                         <View style={styles.modal}>
                             <Text style={styles.modalTitle}>Your Feedback</Text>
-                            <Rating showRating imageSize={20} ratingCount={5} minValue={1} startingValue={5} onFinishRating={(ratingGiven)=>this.setState({rating: ratingGiven})} />
+                            <Rating showRating imageSize={20} ratingCount={5} minValue={1} startingValue={0} onFinishRating={(ratingGiven)=>this.setState({rating: ratingGiven})} />
                             <Input placeholder=' Author' leftIcon={ <Icon name='user-o' type='font-awesome'/>} onChangeText={(value)=>this.setState({author: value})}/>
                             <Input placeholder=' Comment' leftIcon={ <Icon name='comment-o' type='font-awesome'/>} onChangeText={(value)=>this.setState({comment: value})}/>                        
                             <Button onPress={ ()=> {this.props.postComment(dishId, this.state.rating, this.state.author, this.state.comment); this.resetForm()} } color="#512DA8" title="Submit"/>
