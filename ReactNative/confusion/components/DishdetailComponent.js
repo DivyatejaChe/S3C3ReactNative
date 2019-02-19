@@ -100,7 +100,7 @@ class Dishdetail extends Component{
         if(dishId != null){
             return(
                 <ScrollView>
-                    <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.props.favorites.favoritesArr.some(item => item===dishId)} onFavPress={()=>this.markFavorite(dishId) } onCommentPress={()=>this.toggleModal()}/>
+                    <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.props.favorites.some(item => item===dishId)} onFavPress={()=>this.markFavorite(dishId) } onCommentPress={()=>this.toggleModal()}/>
                                         
                     <RenderComments comments={this.props.comments.comments.filter((comment)=>comment.dishId===dishId)} />
                     
