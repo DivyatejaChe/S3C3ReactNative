@@ -37,6 +37,14 @@ function RenderDish(props){
     };
     /* { moveX, moveY, dx, dy } are part of gestureState. Here, we recognize only R to L gesture and hence, dx < -200  */
     
+    const recognizeDragLtoR = ({ moveX, moveY, dx, dy }) => {
+        if(dx> 200)
+            return true;
+        else
+            return false;
+    };
+
+    
     /*  various callbacks for panResponder are supplied here */
     /* onPanResponderGrant here is used to give Visual Feedback to the user */
     const panResponder = PanResponder.create({
@@ -68,7 +76,10 @@ function RenderDish(props){
                     ],
                     { cancelable: false }
                 );
-                
+            
+            if(recognizeDragLtoR(gestureState))
+                props.onCommentPress(); 
+            
             return true;
         }
     });
