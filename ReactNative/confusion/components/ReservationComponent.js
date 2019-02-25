@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Alert } from 'react-native';
 import { Card } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
+import * as Animatable from 'react-native-animatable';
 
 class Reservation extends Component {
     constructor(props){
@@ -25,7 +26,23 @@ class Reservation extends Component {
 
     handleReservation(){
         console.log(JSON.stringify(this.state));
-        this.toggleModal();
+        //this.toggleModal();
+        Alert.alert(
+            'Confirm Your Reservation',
+            'Number of Guests: '+ this.state.guests+ '\nSmoking? '+ this.state.smoking+ '\nDate & Time: '+ this.state.date,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: ()=>this.resetForm(),
+                    type: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: ()=>this.resetForm()
+                }
+            ],
+            { cancelable: false }
+        );
     }
 
     resetForm(){
@@ -38,7 +55,7 @@ class Reservation extends Component {
 
     render(){
         return(
-            <ScrollView>
+            <Animatable.View animation="zoomInUp" duration={4000}>
                 <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Number of Guests</Text>
                     <Picker style={styles.formItem} selectedValue={this.state.guests} onValueChange={(itemValue, itemIndex)=>this.setState({guests: itemValue})}>
@@ -90,7 +107,7 @@ class Reservation extends Component {
                         <Button onPress={ ()=> {this.toggleModal(); this.resetForm()} } color="#512DA8" title="Close"/>
                     </View>
                 </Modal>
-            </ScrollView>
+            </Animatable.View>
         );
     }
 };
