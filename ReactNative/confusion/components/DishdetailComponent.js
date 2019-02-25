@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, StyleSheet, Button, Modal } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, Button, Modal, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -23,8 +23,48 @@ function RenderDish(props){
     const dish = props.dish;
     const favorite = props.favorite;
     
+    /* recognizeDrag() recognizes Drag(R to L Swipe Gesture) */
+    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+        if(dx< -200)
+            return true;
+        else
+            return false;
+    };
+    /* { moveX, moveY, dx, dy } are part of gestureState. Here, we recognize only R to L gesture and hence, dx < -200  */
+    
+    /*  various callbacks for panResponder are supplied here */
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => {
+            return true;    
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            console.log("PanResponder End ", gestureState);
+            if(recognizeDrag(gestureState))
+                Alert.alert(
+                    'Add to Favorites?',
+                    'Are you sure you wish to add '+ dish.name+ ' to your favorites? ',
+                    [
+                        {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel pressed'),
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => { favorite? console.log('Already Favorite') : props.onFavPress() }
+                        }
+                    ],
+                    { cancelable: false }
+                );
+                
+            return true;
+        }
+    });
+    
+    /* gestureState contains info which can be used to recognize various aspects about actual pan gesture done on screen */
+    
     return(
-        <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <Animatable.View animation="fadeInDown" duration={2000} delay={1000} {...panResponder.panHandlers}>
             <Card featuredTitle={dish.name} image={{uri: baseUrl+ dish.image}}>
                 <Text style={ {margin: 10} }>
                     {dish.description} 
