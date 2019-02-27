@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, StyleSheet, Button, Modal, Alert, PanResponder } from 'react-native';
+import { View, Text, ScrollView, FlatList, StyleSheet, Button, Modal, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
 import * as Animatable from 'react-native-animatable';
+
 
 const mapStateToProps = state => {
     return {
@@ -86,6 +87,17 @@ function RenderDish(props){
     
     /* gestureState contains info which can be used to recognize various aspects about actual pan gesture done on screen */
     
+    const shareDish = (title, message, url) => {
+        Share.share({
+           title: title,
+            message: title+ ': '+ message+ ' '+ url,
+            url: url
+        }, {
+            dialogTitle: 'Share '+ title
+        });
+    }
+    
+    
     /* 'ref' in Animatable is called by Animatable.View */
     return(
         <Animatable.View animation="fadeInDown" duration={2000} delay={1000} ref={this.handleViewRef} {...panResponder.panHandlers}>
@@ -96,7 +108,7 @@ function RenderDish(props){
                 <View style= {{justifyContent: 'center', flexDirection: 'row'}} >
                     <Icon raised reverse name={favorite? 'heart' : 'heart-o'} type='font-awesome' color='#f50' onPress={()=>favorite? console.log('Already Favorite') : props.onFavPress()}/>
                     <Icon raised reverse name={'pencil'} type='font-awesome' color='#512DA8' onPress={()=>props.onCommentPress()} />
-
+                    <Icon raised reverse name={'share'} type='font-awesome' color='#51D2A8' onPress={()=>shareDish(dish.name, dish.description, baseUrl+dish.image)} />        
                 </View>
             </Card>
         </Animatable.View>
