@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
-import { Card, Input, Icon, CheckBox } from 'react-native-elements';
-import { SecureStore } from 'expo';
+import { View, StyleSheet, Text, ScrollView, Image } from 'react-native';
+import { Input, Icon, CheckBox, Button } from 'react-native-elements';
+import { SecureStore, Permissions, ImagePicker } from 'expo';
+import { createBottomTabNavigator } from 'react-navigation';
+import { baseUrl } from '../shared/baseUrl';
 
-class Login extends Component {
+class LoginTab extends Component {
     constructor(props){
         super(props);
     
@@ -29,7 +31,10 @@ class Login extends Component {
     /* SecureStore stores key-value pair and returned value has to be either a string or a number and cannot be a JS object */
     
     static navigationOptions = {
-        title: 'Login'
+        title: 'Login',
+        tabBarIcon: ({tintColor}) => (
+            <Icon name='sign-in' type='font-awesome' size={24} iconStyle={{color: tintColor}}/>
+        )
     };
 
     /* Key used here should be the same as the one used in getItemAsync i.e., userinfo */
@@ -47,20 +52,86 @@ class Login extends Component {
 
     render(){
         return(
+            <ScrollView>
             <View style={styles.container}>
-                <Input placeholder="Username" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(uname)=>this.setState({username: uname})} value={this.state.username} containerStyle={styles.formInput}/>
+                <Input placeholder=" Username" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(uname)=>this.setState({username: uname})} value={this.state.username} containerStyle={styles.formInput}/>
                 
-                <Input placeholder="Password" leftIcon={{type: 'font-awesome', name: 'key'}} onChangeText={(pwd)=>this.setState({password: pwd})} value={this.state.password} containerStyle={styles.formInput}/>                
+                <Input placeholder=" Password" leftIcon={{type: 'font-awesome', name: 'key'}} onChangeText={(pwd)=>this.setState({password: pwd})} value={this.state.password} containerStyle={styles.formInput}/>                
                 <CheckBox title="Remember Me" center checked={this.state.remember} onPress={()=>this.setState({remember: !this.state.remember})} containerStyle={styles.formCheckbox}/>
                 
                 <View style={styles.formButton}>
-                    <Button onPress={()=>this.handleLogin()} title="Login" color="#512DA8" />
-                </View>        
-            </View>          
+                    <Button onPress={()=>this.handleLogin()} title=" Login" icon={<Icon name='sign-in' type='font-awesome' size={24} color="white"/>} buttonStyle={{backgroundColor: "#512DA8"}} />
+                </View>  
+                <View style={styles.formButton}>
+                    <Button onPress={()=>this.props.navigation.navigate('Register')} title=" Register" type='clear' icon={<Icon name='user-plus' type='font-awesome' size={22} color="blue"/>} titleStyle={{color: 'blue'}} />
+                </View> 
+            </View>     
+            </ScrollView>    
         );
     }
 
 }
+
+
+class RegisterTab extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            remember: false,
+            imageUrl: baseUrl+ 'images/logo.png'
+        }
+    }
+    
+    static navigationOptions = {
+        title: 'Register',
+        tabBarIcon: ({tintColor}) => (
+            <Icon name='user-plus' type='font-awesome' size={22} iconStyle={{color: tintColor}}/>
+        )
+    };
+
+    render(){
+        return(
+            <ScrollView>
+            <View style={styles.container}>
+                <Input placeholder=" Username" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(uname)=>this.setState({username: uname})} value={this.state.username} containerStyle={styles.formInput}/>
+                
+                <Input placeholder=" Password" leftIcon={{type: 'font-awesome', name: 'key'}} onChangeText={(pwd)=>this.setState({password: pwd})} value={this.state.password} containerStyle={styles.formInput}/>       
+                
+                <Input placeholder=" Firstname" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(fname)=>this.setState({firstname: fname})} value={this.state.firstname} containerStyle={styles.formInput}/>
+
+                <Input placeholder=" Lastname" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(lname)=>this.setState({lastname: lname})} value={this.state.lastname} containerStyle={styles.formInput}/>
+
+                <Input placeholder=" Email" leftIcon={{type: 'font-awesome', name: 'envelope-o'}} onChangeText={(emailId)=>this.setState({email: emailId})} value={this.state.email} containerStyle={styles.formInput}/>
+
+                <CheckBox title="Remember Me" center checked={this.state.remember} onPress={()=>this.setState({remember: !this.state.remember})} containerStyle={styles.formCheckbox}/>
+                
+                <View style={styles.formButton}>
+                    <Button onPress={()=>this.handleRegister()} title=" Register" icon={<Icon name='user-plus' type='font-awesome' size={22} color="white"/>} buttonStyle={{backgroundColor: "#512DA8"}} />
+                </View>        
+            </View>
+            </ScrollView>    
+        );
+    }
+    
+}
+    
+
+const Login = createBottomTabNavigator({
+    Login: LoginTab,
+    Register: RegisterTab
+}, {
+    tabBarOptions: {
+        activeBackgroundColor: '#9575CD',
+        inactiveBackgroundColor: '#D1C4E9',
+        activeTintColor: 'white',
+        inactiveTintColor: 'grey'
+    }
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -68,15 +139,17 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     formInput: {
-        margin: 40,
+        margin: 20,
         marginLeft: 10
     },
     formCheckbox: {
-        margin: 40,
+        margin: 20,
         backgroundColor: null
     },
     formButton: {
-        margin: 60
+        margin: 40,
+        marginBottom: 15,
+        marginTop: 15
     }
 });
 
