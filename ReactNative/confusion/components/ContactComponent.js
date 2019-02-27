@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { View, ScrollView, FlatList, Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card, Button, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
+import { MailComposer } from 'expo';
 
 class Contact extends Component{
+    
+    sendMail(){
+        MailComposer.composeAsync({
+            recipients: ['confusion@food.net '],
+            subject: 'Enquiry',
+            body: 'To whom it may concern: '
+        });
+    }
+    
     render(){
         return(
             <ScrollView>
@@ -19,6 +29,7 @@ class Contact extends Component{
                             {key: 'Email:confusion@food.net'}
                         ]} renderItem={({item})=><Text style={{padding: 10, fontSize: 12}}>{item.key}</Text>}   
                     />
+                    <Button  title=" Send Email" buttonStyle={{backgroundColor: "#512DA8"}} icon={ <Icon name="envelope-o" type="font-awesome" color="white"/> } onPress={()=>this.sendMail()} />
                     </Card>
                 </Animatable.View>
             </ScrollView>
