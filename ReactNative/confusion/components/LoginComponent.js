@@ -87,6 +87,22 @@ class RegisterTab extends Component{
         }
     }
     
+    getImageFromCamera = async () => {
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        
+        if(cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted'){
+            let capturedImage = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+                aspect: [4,3]
+            });
+            
+            if(!capturedImage.cancelled){
+                this.setState({imageUrl: capturedImage.uri});
+            }
+        }
+    }
+    
     static navigationOptions = {
         title: 'Register',
         tabBarIcon: ({tintColor}) => (
@@ -94,10 +110,22 @@ class RegisterTab extends Component{
         )
     };
 
+    handleRegister(){
+        console.log(JSON.stringify(this.state));
+        if(this.state.remember === true){
+            SecureStore.setItemAsync('userinfo', JSON.stringify({ username: this.state.username, password: this.state.password}))
+            .catch((error)=>console.log('Could not save userinfo', error));
+        }
+    }
+
     render(){
         return(
             <ScrollView>
             <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <Image source={{uri: this.state.imageUrl}} loadingIndicatorSource={require('./images/logo.png')} style={styles.image}/>
+                    <Button title="Camera" onPress={this.getImageFromCamera}/>
+                </View>
                 <Input placeholder=" Username" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(uname)=>this.setState({username: uname})} value={this.state.username} containerStyle={styles.formInput}/>
                 
                 <Input placeholder=" Password" leftIcon={{type: 'font-awesome', name: 'key'}} onChangeText={(pwd)=>this.setState({password: pwd})} value={this.state.password} containerStyle={styles.formInput}/>       
@@ -150,6 +178,16 @@ const styles = StyleSheet.create({
         margin: 40,
         marginBottom: 15,
         marginTop: 15
+    },
+    imageContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        margin: 10,
+    },
+    image: {
+        margin: 5,
+        width: 60,
+        height: 45
     }
 });
 
