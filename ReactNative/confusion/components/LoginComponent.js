@@ -104,8 +104,19 @@ class RegisterTab extends Component{
         }
     }
     
+    getImageFromLibrary = async () => {
+        let selectedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4,3]
+        });
+            
+        if(!selectedImage.cancelled){
+            this.processImage(selectedImage.uri);
+        }
+    }
+    
     processImage = async (imageUri) => {
-        let processedImage = await ImageManipulator.manipulate(
+        let processedImage = await ImageManipulator.manipulateAsync(
             imageUri, 
             [
                 {resize: {width: 400}}
@@ -115,6 +126,9 @@ class RegisterTab extends Component{
         console.log(processedImage);
         this.setState({imageUrl: processedImage.uri });
     }
+    
+    
+    
     
     static navigationOptions = {
         title: 'Register',
@@ -138,6 +152,7 @@ class RegisterTab extends Component{
                 <View style={styles.imageContainer}>
                     <Image source={{uri: this.state.imageUrl}} loadingIndicatorSource={require('./images/logo.png')} style={styles.image}/>
                     <Button title="Camera" onPress={this.getImageFromCamera}/>
+                    <Button title="Gallery" onPress={this.getImageFromLibrary}/>
                 </View>
                 <Input placeholder=" Username" leftIcon={{type: 'font-awesome', name: 'user-o'}} onChangeText={(uname)=>this.setState({username: uname})} value={this.state.username} containerStyle={styles.formInput}/>
                 
@@ -193,6 +208,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     imageContainer: {
+        justifyContent: 'space-around',
         flex: 1,
         flexDirection: 'row',
         margin: 10,

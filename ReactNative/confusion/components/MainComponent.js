@@ -267,9 +267,11 @@ class Main extends Component{
                 ToastAndroid.show('You are now connected to WiFi!', ToastAndroid.LONG);
                 break;
             case 'cellular':
-                ToastAndroid.show('You are now connected to Mobile Data!', ToastAndroid.LONG);           break; 
+                ToastAndroid.show('You are now connected to Mobile Data!', ToastAndroid.LONG);
+                break; 
             case 'unknown':
-                ToastAndroid.show('You are now connected to unknown connection!', ToastAndroid.LONG);           break; 
+                ToastAndroid.show('You are now connected to unknown connection!', ToastAndroid.LONG);        
+                break; 
             default:
                 break;
         }
