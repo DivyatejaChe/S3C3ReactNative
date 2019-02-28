@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
-import { View, Platform, Image, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, Platform, Image, StyleSheet, ScrollView, Text, NetInfo, ToastAndroid } from 'react-native';
+/* ToastAndroid is required to show a 'toast msg' on screen whenever network info changes*/
 import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView } from 'react-navigation';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
@@ -243,9 +244,36 @@ class Main extends Component{
         this.props.fetchDishes();
         this.props.fetchComments();
         this.props.fetchPromos();
-        this.props.fetchLeaders();        
+        this.props.fetchLeaders();   
+        
+        NetInfo.getConnectionInfo()
+            .then((connectionInfo) => {
+                ToastAndroid.show('Initial Network Connectivity Type: '+ connectionInfo.type+ ', effectiveType: '+ connectionInfo.effectiveType, ToastAndroid.LONG)
+        });
+        
+        NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
     }
     
+    componentWillUnmount(){
+        NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange);
+    }
+    
+    handleConnectivityChange= (connectionInfo) => {
+        switch(connectionInfo.type){
+            case 'none':
+                ToastAndroid.show('You are now offline!', ToastAndroid.LONG);
+                break;
+            case 'wifi':
+                ToastAndroid.show('You are now connected to WiFi!', ToastAndroid.LONG);
+                break;
+            case 'cellular':
+                ToastAndroid.show('You are now connected to Mobile Data!', ToastAndroid.LONG);           break; 
+            case 'unknown':
+                ToastAndroid.show('You are now connected to unknown connection!', ToastAndroid.LONG);           break; 
+            default:
+                break;
+        }
+    }
     render(){
         return(
             <View style={ {flex: 1, paddingTop: Platform.OS === 'ios'? 0 : Expo.Constants.statusBarHeight} }>
