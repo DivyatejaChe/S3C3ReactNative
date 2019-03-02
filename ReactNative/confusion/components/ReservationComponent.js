@@ -108,7 +108,7 @@ class Reservation extends Component {
         Calendar.createEventAsync(Calendar.DEFAULT, {
             title: "Con Fusion Table Reservation",
             color: '#512DA8',
-            name: 'Your Reservation'
+            name: 'Your Reservation',
             startDate: new Date(Date.parse(date)),
             endDate: new Date(Date.parse(date)+2*60*60*1000),
             timeZone: 'Asia/Hong_Kong',
